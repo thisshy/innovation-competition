@@ -1,0 +1,18 @@
+{
+  "pipeline": {
+    "device": "cpu",
+    "asr_model": "openai/whisper-small",
+    "tts_model": "tensorspeech/tts-tacotron2-ljspeech-en",
+    "tts_vocoder": "tensorspeech/mb-melgan-ljspeech-en",
+    "hotwords": ["方言", "文化"]
+  },
+  "paths": {
+    "processed_data": "data/processed",
+    "assets": "assets",
+    "cache": "assets/cache"
+  },
+  "service": {
+    "allow_hotwords": true,
+    "default_language": "zh"
+  }
+}
