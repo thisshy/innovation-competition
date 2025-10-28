@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+.venv/
+assets/cache/
+assets/demo_outputs/
+assets/*.wav
+models/
+models_cache/
+*.onnx
+.DS_Store

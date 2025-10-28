@@ -1,0 +1,44 @@
+version: "3.9"
+services:
+  api:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: dialect-api
+    environment:
+      - DEVICE=${DEVICE:-cpu}
+      - TRANSFORMERS_CACHE=/models
+    volumes:
+      - ./:/app
+      - models_cache:/models
+    ports:
+      - "8000:8000"
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: all
+              capabilities: [gpu]
+    command: uvicorn service.main:app --host 0.0.0.0 --port 8000
+    runtime: ${RUNTIME:-}
+
+  web:
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    container_name: dialect-web
+    environment:
+      - API_BASE_URL=http://api:8000
+      - DEVICE=${DEVICE:-cpu}
+    volumes:
+      - ./:/app
+      - models_cache:/models
+    ports:
+      - "8501:8501"
+    depends_on:
+      - api
+    command: streamlit run web/app.py --server.port 8501 --server.address 0.0.0.0
+
+volumes:
+  models_cache:
